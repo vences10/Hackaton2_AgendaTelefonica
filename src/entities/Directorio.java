@@ -3,6 +3,7 @@ package entities;
 import exceptions.ContactNotExistException;
 import exceptions.DuplicateContactException;
 import exceptions.NotSuficcientSpaceException;
+import interfaces.Addable;
 
 import java.text.Normalizer;
 import java.util.HashMap;
@@ -11,8 +12,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 //Clase donde estara el constructor de contato
-public class Directorio {
-    private HashMap<String, String> contactos;
+public class Directorio implements Addable {
+    private HashMap<String, Contacto> contactos;
     private int capacidadDirectorio;
 
     public Directorio() {
@@ -41,17 +42,17 @@ public class Directorio {
     public boolean existeContacto(String nombre, String apellido) {
         String nombreCompletoNormalizado = normalizar(nombre + " " + apellido);
         if (this.contactos.containsKey(nombreCompletoNormalizado)) {
-            // System.out.println(nombreCompleto);
+            System.out.println(nombreCompletoNormalizado);
             return true;
         }//if
-        //System.out.println("No hay contactos registrados con ese nombre");
-        return false;
+        throw new ContactNotExistException("No existe el contacto");
+        //return false;
     }//metodo existeContacto
 
-    public void listarContactos() {
+    public void listarContactos() throws ContactNotExistException{
         if (this.contactos.isEmpty()){
-            System.out.println("Agenda vacía.");
-            return;
+            throw new ContactNotExistException("Agenda vacia");
+            //return;
         }
         //Para aprovechar el hash usamos Map<String para ordenar alfabeticamente
         // recorriendolo en un ciclo for
@@ -107,4 +108,9 @@ public class Directorio {
         System.out.println("Puedes agregar " + libres + " contacto(s) más (capacidad máxima: " + this.capacidadDirectorio + ").");
         return libres;
     } //espaciosLibres
+
+    @Override
+    public void aniadirContacto(Contacto c) {
+
+    }
 }
