@@ -2,7 +2,7 @@ package entities;
 
 import exceptions.ContactNotExistException;
 import exceptions.DuplicateContactException;
-import exceptions.NotSuficcientSpaceException;
+import exceptions.NotSufficientSpaceException;
 import interfaces.Addable;
 
 import java.text.Normalizer;
@@ -27,16 +27,22 @@ public class Directorio implements Addable {
         return sinAcentos.toLowerCase(java.util.Locale.ROOT);
     }
 
-    public void agregarContacto(String nombre, String apellido, String telefono) throws NotSuficcientSpaceException, DuplicateContactException {
+    public void agregarContacto(String nombre, String apellido, String telefono) throws NotSufficientSpaceException, DuplicateContactException {
+
+        if (this.contactos.size() >= this.capacidadDirectorio) {
+            throw new NotSufficientSpaceException("Agenda llena. Elimina contactos para añadir un contacto nuevo");
+        }//if agenda llena
         String nombreCompletoNormalizado = normalizar(nombre + " " + apellido);
+
         if (this.contactos.containsKey(nombreCompletoNormalizado)){
             throw new DuplicateContactException("El contacto ya existe");
         }// if de duplicados
-        this.contactos.put(nombreCompletoNormalizado, telefono);
 
-        if (this.contactos.size() >= this.capacidadDirectorio) {
-            throw new NotSuficcientSpaceException("Agenda llena. Elimina contactos para añadir un contacto nuevo");
-        }//if agenda llena
+        Contacto nuevo = new Contacto(nombre, apellido, telefono);
+        this.contactos.put(nombreCompletoNormalizado, nuevo);
+        System.out.println("Contacto añadido: " + nuevo);
+
+
     }//metodo agregarContacto
 
     public boolean existeContacto(String nombre, String apellido) {
@@ -49,19 +55,16 @@ public class Directorio implements Addable {
         //return false;
     }//metodo existeContacto
 
-    public void listarContactos() throws ContactNotExistException{
+    public void listarContactos() throws ContactNotExistException {
         if (this.contactos.isEmpty()){
             throw new ContactNotExistException("Agenda vacia");
-            //return;
-        }
-        //Para aprovechar el hash usamos Map<String para ordenar alfabeticamente
-        // recorriendolo en un ciclo for
-        Map<String, String> contactosOrdenados =new TreeMap<>(this.contactos);
-        for (Map.Entry<String, String> entry : contactosOrdenados.entrySet()){
-            System.out.println(entry.getKey() + " - " + entry.getValue());
-        }//ciclo for
-
-    }//listarContactos
+        }// if
+        Map<String, Contacto> contactosOrdenados = new TreeMap<>(this.contactos);
+        for (Map.Entry<String, Contacto> entry : contactosOrdenados.entrySet()){
+            Contacto c = entry.getValue();
+            System.out.println(c.getNombre() + " " + c.getApellido() + " - " + c.getTelefono());
+        }// for
+    }//listar contactos
 
     public void buscarContacto(String nombre, String apellido) throws ContactNotExistException {
         String nombreCompletoNormalizado = normalizar(nombre + " " + apellido);
@@ -87,7 +90,7 @@ public class Directorio implements Addable {
     public void modificarTelefono(String nombre, String apellido, String nuevoTelefono) throws ContactNotExistException {
         String nombreCompletoNormalizado = normalizar(nombre + " " + apellido);
         if (this.contactos.containsKey(nombreCompletoNormalizado)) {
-            this.contactos.put(nombreCompletoNormalizado, nuevoTelefono);
+            this.contactos.get(nombreCompletoNormalizado).setTelefono(nuevoTelefono);
             System.out.println("Teléfono actualizado. Nuevo teléfono: " + nuevoTelefono);
         } else {
             throw new ContactNotExistException("No se pudo modificar el teléfono porque el contacto no existe");
@@ -111,6 +114,10 @@ public class Directorio implements Addable {
 
     @Override
     public void aniadirContacto(Contacto c) {
-
+        try {
+            agregarContacto(c.getNombre(), c.getApellido(), c.getTelefono());
+        } catch (NotSufficientSpaceException | DuplicateContactException e) {
+            throw e;
+        }
     }
 }

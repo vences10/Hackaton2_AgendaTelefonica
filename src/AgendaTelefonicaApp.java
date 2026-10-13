@@ -29,48 +29,51 @@ public class AgendaTelefonicaApp {
 
             System.out.print("Ingresa la opción deseada: ");
             opcion = sc.nextInt();
+            sc.nextLine(); // <-- limpiar buffer
             switch (opcion) {
 
                 case 1:
-                    System.out.println("Nombre: ");
+                    System.out.print("Nombre: ");
                     String nombre = sc.nextLine();
-                    System.out.println("Apellido: ");
+                    System.out.print("Apellido: ");
                     String apellido = sc.nextLine();
-                    System.out.println("Teléfono: ");
+                    System.out.print("Teléfono: ");
                     String telefono = sc.nextLine();
                     dir.agregarContacto(nombre, apellido, telefono);
                     System.out.println("Contacto añadido.");
                     break;
                 case 2:
-                    System.out.println("Nombre: ");
+                    System.out.print("Nombre: ");
                     String nombreBuscar = sc.nextLine();
-                    System.out.println("Apellido: ");
+                    System.out.print("Apellido: ");
                     String apellidoBuscar = sc.nextLine();
                     dir.buscarContacto(nombreBuscar, apellidoBuscar);
                     break;
                 case 3:
-                    System.out.println("Nombre: ");
+                    System.out.print("Nombre: ");
                     String nombreExiste = sc.nextLine();
-                    System.out.println("Apellido: ");
+                    System.out.print("Apellido: ");
                     String apellidoExiste = sc.nextLine();
-                    dir.existeContacto(nombreExiste, apellidoExiste);
+                    boolean existe = dir.existeContacto(nombreExiste, apellidoExiste);
+                    System.out.println(existe ? "Sí existe" : "No existe");
                     break;
+
                 case 4:
                     dir.listarContactos();
                     break;
                 case 5:
-                    System.out.println("Nombre: ");
+                    System.out.print("Nombre: ");
                     String nombreModificar = sc.nextLine();
-                    System.out.println("Apellido: ");
+                    System.out.print("Apellido: ");
                     String apellidoModificar = sc.nextLine();
-                    System.out.println("Ingresa en nuevo número de teléfono: ");
+                    System.out.print("Ingresa en nuevo número de teléfono: ");
                     String telefonoModificar = sc.nextLine();
                     dir.modificarTelefono(nombreModificar, apellidoModificar, telefonoModificar);
                     break;
                 case 6:
-                    System.out.println("Nombre: ");
+                    System.out.print("Nombre: ");
                     String nombreEliminar = sc.nextLine();
-                    System.out.println("Apellido: ");
+                    System.out.print("Apellido: ");
                     String apellidoEliminar = sc.nextLine();
                     dir.eliminarContacto(nombreEliminar, apellidoEliminar);
                     break;
