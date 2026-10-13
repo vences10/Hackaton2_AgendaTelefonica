@@ -83,15 +83,28 @@ public class Directorio {
 
     }//eliminarContacto
 
-    funtion modificarTelefono() {
-
+    public void modificarTelefono(String nombre, String apellido, String nuevoTelefono) throws ContactNotExistException {
+        String nombreCompletoNormalizado = normalizar(nombre + " " + apellido);
+        if (this.contactos.containsKey(nombreCompletoNormalizado)) {
+            this.contactos.put(nombreCompletoNormalizado, nuevoTelefono);
+            System.out.println("Teléfono actualizado. Nuevo teléfono: " + nuevoTelefono);
+        } else {
+            throw new ContactNotExistException("No se pudo modificar el teléfono porque el contacto no existe");
+        }//else
     }//modificarTelefono
 
-    funtion agendaLlena() {
-
+    public boolean agendaLlena() {
+        if (this.contactos.size() >= this.capacidadDirectorio) {
+            System.out.println("La agenda está llena. No hay espacio disponible para nuevos contactos.");
+            return true;
+        }//if
+        System.out.println("La agenda aún tiene espacio disponible.");
+        return false;
     }//agendaLlena
 
-    funtion espaciosLibres() {
-
+    public int espaciosLibres() {
+        int libres = this.capacidadDirectorio - this.contactos.size();
+        System.out.println("Puedes agregar " + libres + " contacto(s) más (capacidad máxima: " + this.capacidadDirectorio + ").");
+        return libres;
     } //espaciosLibres
 }
