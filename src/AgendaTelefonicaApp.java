@@ -1,87 +1,79 @@
-import entities.Contacto;
 import entities.Directorio;
-import exceptions.DuplicateContactException;
-import interfaces.Addable;
-
 import java.util.Scanner;
 
 public class AgendaTelefonicaApp {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        Directorio dir = new Directorio();
         int opcion;
-        Directorio dir = new Directorio(); //crear directorio
-
-        // Agregar contactos
-        dir.agregarContacto("Juan", "Pérez", "555-1234");
-        dir.agregarContacto("María", "López", "555-5678");
-        dir.agregarContacto("Carlos", "Ramírez", "555-9999");
-
-        System.out.println("Buscar JUAN PEREZ ¿existe? " + dir.existeContacto("JUAN", "PEREZ"));
+        boolean salir = false;
 
         do {
-            System.out.println("1. Agregar contacto");
+            System.out.println("\n1. Agregar contacto");
             System.out.println("2. Buscar contacto");
             System.out.println("3. ¿Existe contacto?");
             System.out.println("4. Listar contactos");
             System.out.println("5. Modificar contactos");
             System.out.println("6. Eliminar contactos");
             System.out.println("7. Salir");
-
             System.out.print("Ingresa la opción deseada: ");
-            opcion = sc.nextInt();
-            switch (opcion) {
 
+            opcion = sc.nextInt();
+            sc.nextLine(); // limpiar buffer
+
+            switch (opcion) {
                 case 1:
-                    System.out.println("Nombre: ");
+                    System.out.print("Nombre: ");
                     String nombre = sc.nextLine();
-                    System.out.println("Apellido: ");
+                    System.out.print("Apellido: ");
                     String apellido = sc.nextLine();
-                    System.out.println("Teléfono: ");
+                    System.out.print("Teléfono: ");
                     String telefono = sc.nextLine();
                     dir.agregarContacto(nombre, apellido, telefono);
-                    System.out.println("Contacto añadido.");
+                    System.out.println("Contacto añadido");
                     break;
                 case 2:
-                    System.out.println("Nombre: ");
+                    System.out.print("Nombre: ");
                     String nombreBuscar = sc.nextLine();
-                    System.out.println("Apellido: ");
+                    System.out.print("Apellido: ");
                     String apellidoBuscar = sc.nextLine();
                     dir.buscarContacto(nombreBuscar, apellidoBuscar);
                     break;
                 case 3:
-                    System.out.println("Nombre: ");
+                    System.out.print("Nombre: ");
                     String nombreExiste = sc.nextLine();
-                    System.out.println("Apellido: ");
+                    System.out.print("Apellido: ");
                     String apellidoExiste = sc.nextLine();
-                    dir.existeContacto(nombreExiste, apellidoExiste);
+                    boolean existe = dir.existeContacto(nombreExiste, apellidoExiste);
+                    System.out.println(existe ? "Sí existe" : "No existe");
                     break;
                 case 4:
                     dir.listarContactos();
                     break;
                 case 5:
-                    System.out.println("Nombre: ");
+                    System.out.print("Nombre: ");
                     String nombreModificar = sc.nextLine();
-                    System.out.println("Apellido: ");
+                    System.out.print("Apellido: ");
                     String apellidoModificar = sc.nextLine();
-                    System.out.println("Ingresa en nuevo número de teléfono: ");
+                    System.out.print("Nuevo teléfono: ");
                     String telefonoModificar = sc.nextLine();
                     dir.modificarTelefono(nombreModificar, apellidoModificar, telefonoModificar);
                     break;
                 case 6:
-                    System.out.println("Nombre: ");
+                    System.out.print("Nombre: ");
                     String nombreEliminar = sc.nextLine();
-                    System.out.println("Apellido: ");
+                    System.out.print("Apellido: ");
                     String apellidoEliminar = sc.nextLine();
                     dir.eliminarContacto(nombreEliminar, apellidoEliminar);
                     break;
                 case 7:
+                    salir = true;
+                    System.out.println("Saliendo...");
                     break;
                 default:
-                    System.out.println("Opción Incorrecta - Intentalo nuevamente");
-
-            }//do
-        }
-            while (opcion != 0) ;
+                    System.out.println("Opción incorrecta - Inténtalo nuevamente");
+            }
+        } while (!salir);
         sc.close();
-        }//main
+    }//main
 }//class AgendaTelefonicaApp

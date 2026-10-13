@@ -24,19 +24,24 @@ public class Directorio implements Addable {
     private String normalizar(String texto){
         String sinAcentos = Normalizer.normalize(texto, Normalizer.Form.NFD)
                 .replaceAll("\\p{M}", ""); //quitar acentos
-        return sinAcentos.toLowerCase(java.util.Locale.ROOT);
+        return sinAcentos.toLowerCase(Locale.ROOT);
+    }
+
+    @Override
+    public void aniadirContacto(Contacto c){
+        agregarContacto(c.getNombre(), c.getApellido(), c.getTelefono());
     }
 
     public void agregarContacto(String nombre, String apellido, String telefono) throws NotSuficcientSpaceException, DuplicateContactException {
+        if (this.contactos.size() >= this.capacidadDirectorio) {
+            throw new NotSuficcientSpaceException("Agenda llena. Elimina contactos para añadir un contacto nuevo");
+        }//if agenda llena
+
         String nombreCompletoNormalizado = normalizar(nombre + " " + apellido);
         if (this.contactos.containsKey(nombreCompletoNormalizado)){
             throw new DuplicateContactException("El contacto ya existe");
         }// if de duplicados
-        this.contactos.put(nombreCompletoNormalizado, telefono);
-
-        if (this.contactos.size() >= this.capacidadDirectorio) {
-            throw new NotSuficcientSpaceException("Agenda llena. Elimina contactos para añadir un contacto nuevo");
-        }//if agenda llena
+        this.contactos.put(nombreCompletoNormalizado, new Contacto(nombre, apellido, telefono));
     }//metodo agregarContacto
 
     public boolean existeContacto(String nombre, String apellido) {
@@ -56,21 +61,22 @@ public class Directorio implements Addable {
         }
         //Para aprovechar el hash usamos Map<String para ordenar alfabeticamente
         // recorriendolo en un ciclo for
-        Map<String, String> contactosOrdenados =new TreeMap<>(this.contactos);
-        for (Map.Entry<String, String> entry : contactosOrdenados.entrySet()){
-            System.out.println(entry.getKey() + " - " + entry.getValue());
+        Map<String, Contacto> contactosOrdenados =new TreeMap<>(this.contactos);
+            for (Map.Entry <String, Contacto> entry : contactosOrdenados.entrySet()){
+                Contacto c = entry.getValue();
+                System.out.println(c.getNombre() + " " + c.getApellido() + c.getTelefono());
         }//ciclo for
 
     }//listarContactos
 
     public void buscarContacto(String nombre, String apellido) throws ContactNotExistException {
         String nombreCompletoNormalizado = normalizar(nombre + " " + apellido);
-        if (this.contactos.containsKey(nombreCompletoNormalizado)){
-            System.out.println("Teléfono: " + this.contactos.get(nombreCompletoNormalizado));
+        Contacto c = this.contactos.get(nombreCompletoNormalizado);
+        if (c != null){
+            System.out.println("Teléfono: " + c.getTelefono());
         } else {
             throw new ContactNotExistException("No se encuentra el contacto");
         }//else
-
     }//buscarContacto
 
     public void eliminarContacto(String nombre, String apellido) throws ContactNotExistException{
@@ -86,8 +92,9 @@ public class Directorio implements Addable {
 
     public void modificarTelefono(String nombre, String apellido, String nuevoTelefono) throws ContactNotExistException {
         String nombreCompletoNormalizado = normalizar(nombre + " " + apellido);
-        if (this.contactos.containsKey(nombreCompletoNormalizado)) {
-            this.contactos.put(nombreCompletoNormalizado, nuevoTelefono);
+        Contacto c = this.contactos.get(nombreCompletoNormalizado);
+        if (c != null) {
+            c.setTelefono(nuevoTelefono);
             System.out.println("Teléfono actualizado. Nuevo teléfono: " + nuevoTelefono);
         } else {
             throw new ContactNotExistException("No se pudo modificar el teléfono porque el contacto no existe");
@@ -109,8 +116,4 @@ public class Directorio implements Addable {
         return libres;
     } //espaciosLibres
 
-    @Override
-    public void aniadirContacto(Contacto c) {
-
-    }
 }
