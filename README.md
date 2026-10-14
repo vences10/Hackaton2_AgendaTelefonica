@@ -60,9 +60,8 @@ El sistema cuenta con un menú por consola para probar todas las funcionalidades
 - Muestra cuántos contactos más se pueden agregar.  
 - Se basa en el tamaño máximo definido al crear la agenda.  
 
----
-```
 ##  Estructura del Proyecto
+```
 src/
 ├── entities/
 │   ├── Contacto.java
