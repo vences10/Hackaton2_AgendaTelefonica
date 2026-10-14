@@ -2,6 +2,7 @@ package entities;
 
 import exceptions.ContactNotExistException;
 import exceptions.DuplicateContactException;
+import exceptions.InvalidContactDataException;
 import exceptions.NotSufficientSpaceException;
 import interfaces.Addable;
 
@@ -21,6 +22,18 @@ public class Directorio implements Addable {
         this.capacidadDirectorio = 10; //Limite de 10 intrucciones de Canva
     }//constructor Directorio
 
+    private void validarDatos(String nombre, String apellido, String telefono) throws InvalidContactDataException{
+        if (nombre == null || nombre.isBlank()) {
+            throw new InvalidContactDataException("El nombre no puede estar vacío");
+        }
+        if (apellido == null || apellido.isBlank()) {
+            throw new InvalidContactDataException("El apellido no puede estar vacío");
+        }
+        if (telefono == null || telefono.isBlank()) {
+            throw new InvalidContactDataException("El teléfono no puede estar vacío");
+        }
+    }
+
     private String normalizar(String texto){
         String sinAcentos = Normalizer.normalize(texto, Normalizer.Form.NFD)
                 .replaceAll("\\p{M}", ""); //quitar acentos
@@ -28,7 +41,7 @@ public class Directorio implements Addable {
     }
 
     public void agregarContacto(String nombre, String apellido, String telefono) throws NotSufficientSpaceException, DuplicateContactException {
-
+        validarDatos(nombre, apellido, telefono);
         if (this.contactos.size() >= this.capacidadDirectorio) {
             throw new NotSufficientSpaceException("Agenda llena. Elimina contactos para añadir un contacto nuevo");
         }//if agenda llena
@@ -41,8 +54,6 @@ public class Directorio implements Addable {
         Contacto nuevo = new Contacto(nombre, apellido, telefono);
         this.contactos.put(nombreCompletoNormalizado, nuevo);
         System.out.println("Contacto añadido: " + nuevo);
-
-
     }//metodo agregarContacto
 
     public boolean existeContacto(String nombre, String apellido) {
@@ -69,7 +80,7 @@ public class Directorio implements Addable {
     public void buscarContacto(String nombre, String apellido) throws ContactNotExistException {
         String nombreCompletoNormalizado = normalizar(nombre + " " + apellido);
         if (this.contactos.containsKey(nombreCompletoNormalizado)){
-            System.out.println("Teléfono: " + this.contactos.get(nombreCompletoNormalizado));
+            System.out.println("Teléfono: " + this.contactos.get(nombreCompletoNormalizado).getTelefono());
         } else {
             throw new ContactNotExistException("No se encuentra el contacto");
         }//else
@@ -87,7 +98,8 @@ public class Directorio implements Addable {
 
     }//eliminarContacto
 
-    public void modificarTelefono(String nombre, String apellido, String nuevoTelefono) throws ContactNotExistException {
+    public void modificarTelefono(String nombre, String apellido, String nuevoTelefono) throws ContactNotExistException, InvalidContactDataException {
+        validarDatos(nombre, apellido, nuevoTelefono);
         String nombreCompletoNormalizado = normalizar(nombre + " " + apellido);
         if (this.contactos.containsKey(nombreCompletoNormalizado)) {
             this.contactos.get(nombreCompletoNormalizado).setTelefono(nuevoTelefono);
