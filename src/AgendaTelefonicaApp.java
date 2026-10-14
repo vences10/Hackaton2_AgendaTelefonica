@@ -15,8 +15,8 @@ public class AgendaTelefonicaApp {
         dir.agregarContacto("Juan", "Pérez", "555-1234");
         dir.agregarContacto("María", "López", "555-5678");
         dir.agregarContacto("Carlos", "Ramírez", "555-9999");
-
-        System.out.println("Buscar JUAN PEREZ ¿existe? " + dir.existeContacto("JUAN", "PEREZ"));
+        dir.agregarContacto("Ana", "González", "555-89984" +
+                "");
 
         do {
             System.out.println("1. Agregar contacto");
@@ -84,7 +84,7 @@ public class AgendaTelefonicaApp {
 
             }//do
         }
-            while (opcion != 0) ;
+            while (opcion != 7) ;
         sc.close();
         }//main
 }//class AgendaTelefonicaApp
