@@ -61,7 +61,7 @@ El sistema cuenta con un menú por consola para probar todas las funcionalidades
 - Se basa en el tamaño máximo definido al crear la agenda.  
 
 ---
-
+```
 ##  Estructura del Proyecto
 src/
 ├── entities/
@@ -74,10 +74,11 @@ src/
 │   └── NotSufficientSpaceException.java
 ├── interfaces/
 │   └── Addable.java
-└── AgendaTelefonicaApp.java
-README.md
-LICENSE
-.gitignore
+├── AgendaTelefonicaApp.java
+├── README.md
+├── LICENSE
+└── .gitignore
+```
 
 ## 👩‍💻 Autores
 - **Lizeth Dorantes** 
