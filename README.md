@@ -10,16 +10,15 @@ Crear un sistema que permita gestionar una agenda telefónica con las siguientes
 - Un contacto se considera igual a otro cuando tienen el mismo nombre y apellido (sin distinguir mayúsculas/minúsculas).
 
 - La agenda puede crearse de dos formas:
-  - Indicando un tamaño máximo.
   - Usando un tamaño por defecto de **10 contactos**.
 
 ### Validaciones importantes
-- Los nombres y apellidos **no pueden estar vacíos**.  
+- Los nombres, apellidos y teléfonos **no pueden estar vacíos**.  
 - No se pueden añadir **contactos duplicados** (mismo nombre y apellido).  
 
 ---
 
-##  Herramientas y Funcionalidades
+##  Herramientas y funcionalidades
 
 El sistema cuenta con un menú por consola para probar todas las funcionalidades:
 
@@ -27,7 +26,7 @@ El sistema cuenta con un menú por consola para probar todas las funcionalidades
 - Añade un contacto a la agenda.  
 - Si no hay espacio suficiente, se indica que la agenda está llena.  
 - Antes de añadir, se comprueba que no exista ya en la agenda.  
-- No se puede añadir si el nombre o apellido están vacíos.  
+- No se puede añadir si el nombre, apellido o teléfono están vacíos.  
 
 ###  `existeContacto(Contacto c)`
 - Verifica si un contacto ya existe en la agenda.  
@@ -49,7 +48,8 @@ El sistema cuenta con un menú por consola para probar todas las funcionalidades
 - Si el contacto no existe, se informa al usuario.  
 
 ###  `modificarTelefono(String nombre, String apellido, String nuevoTelefono)`
-- Permite modificar el teléfono de un contacto existente.  
+- Permite modificar el teléfono de un contacto existente.
+- Se valida que el nuevo teléfono no este vacío.
 - Si el contacto no existe, se muestra un mensaje de error.  
 
 ###  `agendaLlena()`
@@ -65,16 +65,16 @@ El sistema cuenta con un menú por consola para probar todas las funcionalidades
 ##  Estructura del Proyecto
 src/
 ├── entities/
-│    ├── Contacto.java
-│    └── Directorio.java
+│   ├── Contacto.java
+│   └── Directorio.java
 ├── exceptions/
-│    ├── ContactNotExistException.java
-│    ├── DuplicateContactException.java
-│    └── NotSufficientSpaceException.java
+│   ├── ContactNotExistException.java
+│   ├── DuplicateContactException.java
+│   ├── InvalidContactDataException.java
+│   └── NotSufficientSpaceException.java
 ├── interfaces/
-│    ├── Addable.java
-│    └── AgendaTelefonicaApp.java
-/
+│   └── Addable.java
+└── AgendaTelefonicaApp.java
 README.md
 LICENSE
 .gitignore
